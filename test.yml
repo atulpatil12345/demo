@@ -4,15 +4,15 @@
   gather_facts: no
   tasks:
     - name: Check memory usage
-      command: free | grep Mem | awk '{print $3/$2 * 100.0}'
+      shell: free | grep Mem | awk '{print $3/$2 * 100.0}'
       register: memory_usage
 
     - name: Check CPU usage
-      command: mpstat 1 1 | grep "Average" | awk '{print 100 - $12}'
+      shell: mpstat 1 1 | grep "Average" | awk '{print 100 - $12}'
       register: cpu_usage
 
     - name: Check disk usage
-      command: df -h --total | grep 'total' | awk '{print $5}' | sed 's/%//'
+      shell: df -h --total | grep 'total' | awk '{print $5}' | sed 's/%//'
       register: disk_usage
 
     - name: Report high memory usage
