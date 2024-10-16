@@ -7,13 +7,25 @@
       shell: free | grep Mem | awk '{print $3/$2 * 100.0}'
       register: memory_usage
 
+    - name: Debug memory usage
+      debug:
+        msg: "Memory usage: {{ memory_usage.stdout | round(2) }}%"
+    
     - name: Check CPU usage
       shell: mpstat 1 1 | grep "Average" | awk '{print 100 - $12}'
       register: cpu_usage
 
+    - name: Debug CPU usage
+      debug:
+        msg: "CPU usage: {{ cpu_usage.stdout | round(2) }}%"
+    
     - name: Check disk usage
       shell: df -h --total | grep 'total' | awk '{print $5}' | sed 's/%//'
       register: disk_usage
+
+    - name: Debug disk usage
+      debug:
+        msg: "Disk usage: {{ disk_usage.stdout | int }}%"
 
     - name: Report high memory usage
       debug:
